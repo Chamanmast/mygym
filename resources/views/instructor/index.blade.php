@@ -133,7 +133,7 @@
                 </table>
 
             </div>
-
+                {{ $scheduledClasses->links() }}
         </div>
 
     </div>

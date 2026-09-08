@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\ClassType;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class ScheduledClassFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'instructor_id' => User::where('role','instructor')->get()->random()->id,
+            'class_type_id' => ClassType::inRandomOrder()->value('id'),
+            'date_time' => fake()->dateTimeBetween('now', '+2 days'),
         ];
     }
 }

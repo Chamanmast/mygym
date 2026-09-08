@@ -26,21 +26,36 @@
                     <x-nav-link :href="$url" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                </div>
-                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('class_type.index')" :active="request()->routeIs('class_type.index')">
-                        {{ __('Class Type') }}
-                    </x-nav-link>
-                </div>
-                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('schedule.create')" :active="request()->routeIs('schedule.create')">
-                        {{ __('Create a Class') }}
-                    </x-nav-link>
-                </div>
-                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index')">
-                        {{ __('Upcoming Class') }}
-                    </x-nav-link>
+
+                    @can('schedule')
+                        <x-nav-link :href="route('class_type.index')" :active="request()->routeIs('class_type.index')">
+                            {{ __('Class Type') }}
+                        </x-nav-link>
+
+
+                        <x-nav-link :href="route('schedule.create')" :active="request()->routeIs('schedule.create')">
+                            {{ __('Create a Class') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index')">
+                            {{ __('Upcoming Class') }}
+                        </x-nav-link>
+
+
+
+                        <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.index')">
+                            {{ __('Users') }}
+                        </x-nav-link>
+                    @endcan
+
+                    @can('booking')
+                        <x-nav-link :href="route('bookings.create')" :active="request()->routeIs('booking.create')">
+                            Booking A Class
+                        </x-nav-link>
+                          <x-nav-link :href="route('bookings.index')" :active="request()->routeIs('booking.index')">
+                            Upcoming Booking
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 

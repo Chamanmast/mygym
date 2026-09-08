@@ -46,8 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(ScheduledClass::class, 'instructor_id');
     }
-    public function classTypes()
+
+     public function bookings()
     {
-        return $this->belongsToMany(ClassType::class, 'scheduled_classes', 'instructor_id', 'class_type_id');
+        return $this->belongsToMany(ScheduledClass::class, 'bookings','instructor_id');
     }
 }

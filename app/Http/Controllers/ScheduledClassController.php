@@ -8,6 +8,7 @@ use App\Models\ScheduledClass;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 use Carbon\Carbon;
@@ -19,7 +20,7 @@ class ScheduledClassController extends Controller
      */
     public function index()
     {
-        $scheduledClasses  = ScheduledClass::get();
+        $scheduledClasses  = ScheduledClass::paginate(5);
         return view('instructor.index', compact('scheduledClasses'));
     }
 
@@ -122,6 +123,8 @@ class ScheduledClassController extends Controller
      */
     public function destroy(ScheduledClass $schedule)
     {
+       abort_if(Gate::denies('delete', $schedule), 403);
+       // abort_unless(Gate::allows('delete', $schedule), 403);
         $schedule->delete();
         return redirect()
             ->back()
