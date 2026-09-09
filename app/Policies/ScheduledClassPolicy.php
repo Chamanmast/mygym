@@ -7,8 +7,11 @@ use App\Models\User;
 
 class ScheduledClassPolicy
 {
-   public function delete(User $user,ScheduledClass $scheduled)
-   {
-    return $user->id === $scheduled->instructor_id;
-   }
+    public function delete(User $user, ScheduledClass $scheduled)
+    {
+        if ($user->role == 'admin') {
+            return true;
+        }
+        return $user->id === $scheduled->instructor_id;
+    }
 }

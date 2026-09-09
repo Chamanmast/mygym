@@ -10,13 +10,24 @@ use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
+    private $paginate;
+    public function __construct()
+    {
+        $this->paginate =10;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $scheduled = Booking::where('instructor_id',Auth::id())->with('instructor:id,name', 'scheduled.classType:id,name')->paginate(10);
-         //dd($scheduled);
+        $scheduled = ScheduledClass::Upcoming()
+            ->with('instructor:id,name', 'classType:id,name,description', 'booking:id,scheduled_class_id')
+            ->whereHas('members', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->paginate($this->paginate);
+
         return view('member.index', compact('scheduled'));
     }
 
@@ -25,7 +36,11 @@ class BookingController extends Controller
      */
     public function create()
     {
-        $scheduled = ScheduledClass::where('date_time', '>', now())->with('instructor:id,name', 'classType:id,name,description')->paginate(10);
+        $scheduled = ScheduledClass::Upcoming()
+            ->with('instructor:id,name', 'classType:id,name,description',)
+            ->notBooked()
+            ->paginate($this->paginate);
+
         return view('member.book', compact('scheduled'));
     }
 
@@ -69,7 +84,7 @@ class BookingController extends Controller
      */
     public function destroy(Booking $booking)
     {
-          /** @var \App\Models\User $user */
+         /** @var \App\Models\User $user */
         $user = Auth::user();
         $user->bookings()->detach($booking->scheduled_class_id);
         return redirect()->back()->with('success', 'Booking cancle Successfully');

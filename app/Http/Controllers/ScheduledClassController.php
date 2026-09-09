@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ClassCancled;
 use App\Http\Requests\ValidateScheduleRequest;
 use App\Models\ClassType;
 use App\Models\ScheduledClass;
@@ -20,7 +21,7 @@ class ScheduledClassController extends Controller
      */
     public function index()
     {
-        $scheduledClasses  = ScheduledClass::paginate(5);
+        $scheduledClasses  = ScheduledClass::with('instructor:id,name','classType:id,name')->paginate(5);
         return view('instructor.index', compact('scheduledClasses'));
     }
 
@@ -123,9 +124,11 @@ class ScheduledClassController extends Controller
      */
     public function destroy(ScheduledClass $schedule)
     {
-       abort_if(Gate::denies('delete', $schedule), 403);
-       // abort_unless(Gate::allows('delete', $schedule), 403);
-        $schedule->delete();
+        abort_if(Gate::denies('delete', $schedule), 403);
+        // abort_unless(Gate::allows('delete', $schedule), 403);
+        ClassCancled::dispatch($schedule);
+        // $schedule->delete();
+        // $schedule->members()->detach();
         return redirect()
             ->back()
             ->with('success', 'Schedule Class Deleted');

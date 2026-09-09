@@ -5,15 +5,7 @@
         @forelse ($scheduled as $class)
             <div class="py-6">
                 <div class="flex gap-6 justify-between">
-                    @if ($isCancle)
-                        <div>
-                            <p class="text-2xl font-bold text-purple-700">{{ $class->scheduled->classType->name }}</p>
-                            <p class="text-sm">{{ $class->instructor->name }}</p>
-                            <p class="mt-2">{{ $class->scheduled->classType->description }}</p>
-                            <span class="text-slate-600 text-sm">{{ $class->scheduled->classType->minutes }}
-                                minutes</span>
-                        </div>
-                    @else
+
                         <div>
                             <p class="text-2xl font-bold text-purple-700">{{ $class->classType->name }}</p>
                             <p class="text-sm">{{ $class->instructor->name }}</p>
@@ -24,18 +16,20 @@
                             <p class="text-lg font-bold">{{ $class->date_time->format('g:i a') }}</p>
                             <p class="text-sm">{{ $class->date_time->format('jS M') }}</p>
                         </div>
-                    @endif
+
 
                 </div>
                 <div class="mt-1 text-right">
                     <form method="post"
-                        action="{{ $isCancle ? route('bookings.destroy', $class->id) : route('bookings.store') }}">
+                        action="{{ $isCancle ? route('bookings.destroy', $class->booking->id) : route('bookings.store') }}">
                         @csrf
-                        <input type="hidden" name="scheduled_class_id" value="{{ $class->id }}">
 
                         @if ($isCancle)
+                        @method('delete')
                             <x-secondary-button class="px-3 py-1">Cancle</x-secondary-button>
                         @else
+                         <input type="hidden" name="scheduled_class_id" value="{{ $class->id }}">
+
                             <x-primary-button class="px-3 py-1">Book</x-primary-button>
                         @endif
 

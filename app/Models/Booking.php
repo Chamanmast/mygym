@@ -21,10 +21,10 @@ class Booking extends Model
     }
     public function scheduled()
     {
-       return $this->belongsTo(
-        ScheduledClass::class,
-        'scheduled_class_id',
-        'id'
-    );
+        return $this->belongsTo(
+            ScheduledClass::class,
+            'scheduled_class_id',
+            'id'
+        );
     }
 }
