@@ -11,7 +11,7 @@ class MyTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_example(): void
+    public function test_home_page_returns_successful_response(): void
     {
          $response = $this->get('/home');
 

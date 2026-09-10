@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ClassCancled;
+
 use App\Http\Requests\ValidateScheduleRequest;
 use App\Models\ClassType;
 use App\Models\ScheduledClass;
@@ -45,7 +45,7 @@ class ScheduledClassController extends Controller
 
         $dateTime = Carbon::createFromFormat(
             'Y-m-d H:i',
-            $validated->date . ' ' . $validated->time
+            $request->date . ' ' . $request->time
         );
 
         if ($dateTime->isPast()) {
@@ -64,7 +64,7 @@ class ScheduledClassController extends Controller
         $cl->save();
 
         return redirect()
-            ->back()
+            ->route('schedule.index')
             ->with('success', 'Schedule Class Created');
     }
 
@@ -115,7 +115,7 @@ class ScheduledClassController extends Controller
         $schedule->update();
 
         return redirect()
-            ->back()
+            ->route('schedule.index')
             ->with('success', 'Schedule Class Created');
     }
 

@@ -55,6 +55,10 @@ Route::resource('class_type', ClassTypeController::class)->middleware(['auth', '
 Route::get('member/dashboard', function () {
     return view('member.dashboard');
 })->middleware(['auth', 'role:user'])->name('member.dashboard');
+Route::get('/home', function () {
+    echo  'Home';
+});
+
 
 
 Route::middleware('auth')->group(function () {
