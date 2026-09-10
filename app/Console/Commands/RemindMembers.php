@@ -2,9 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Events\ReminderMember;
+use App\Jobs\ReminderMemberNotificationJob;
 use App\Models\User;
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class RemindMembers extends Command
 {
@@ -31,6 +35,11 @@ class RemindMembers extends Command
             ->whereDoesntHave('bookings', function ($query) {
                 $query->where('date_time', '>', now());
             })->select('id','name', 'email')->orderBy('id')->get();
-        $this->table(['Id','Name','Email'],$users->toArray());
+
+         foreach ($users as $user) {
+        ReminderMemberNotificationJob::dispatch($user);
+    }
+        //$this->table(['Id','Name','Email'],$users->toArray());
+        $this->info("Reminder jobs dispatched: {$users->count()}");
     }
 }
